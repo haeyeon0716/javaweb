@@ -7,6 +7,11 @@
 <head>
 <meta charset="UTF-8">
 <title>이미지 보기</title>
+	<script type="text/javascript">
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		})
+	</script>
 </head>
 <body>
 	<div class="container">
@@ -16,8 +21,9 @@
 				<b>${vo.no }. ${vo.title } </b>
 			</div>
 
-			<div class="card" style="width: 100%">
-				<img class="card-img-top" src="${vo.fileName }" alt="Card image">
+			<div class="card">
+			<!-- card-img-ovelay 이미지 = width: 100% -->
+				<img src="${vo.fileName }" alt="image">
 				<div class="card-img-overlay">
 					<c:if test="${login.id == vo.id }">
 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changeImageModal">
@@ -42,7 +48,7 @@
 		<!-- a tag : 데이터를 클릭하면 href의 정보를 가져와서 페이지 이동시킨다. -->
 		<a
 			href="updateForm.do?no=${param.no }&page=${param.page }&perPageNum=${param.perPageNum}&key=${param.key}&word=${param.word}"
-			class="btn btn-primary"
+			class="btn btn-primary" title = "이미지를 제외한 정보만 수정 가능" data-toggle = "tooltip" data-placement="top"
 		>수정</a>
 		<button type="button" class="btn btn-danger" data-toggle="modal"
 			data-target="#myModal"
@@ -52,11 +58,9 @@
 			class="btn btn-info"
 		>리스트</a>
 	</div>
-	<!-- container의 끝 -->
+	<!-- container의 끝 -->	
 	
-	
-	
-	<!-- The Modal -->
+<!-- The Modal -->
 <div class="modal" id="changeImageModal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -71,6 +75,12 @@
 	<!-- 숨겨서 넘겨야 할 데이터 - 이미지 번호, 현재 파일이름 삭제 -->
 	<input name="no" value= "${vo.no }" type = "hidden">
 	<input name="deletefileName" value= "${vo.fileName }" type = "hidden">
+	<!-- 페이지 정보도 넘김 -->
+	<input name="page" value= "${param.page }" type = "hidden">
+	<input name="perPageNum" value= "${param.perPageNum }" type = "hidden">
+	<input name="key" value= "${param.key }" type = "hidden">
+	<input name="word" value= "${param.word }" type = "hidden">
+	
       <!-- Modal body -->
       <div class="modal-body">
 		

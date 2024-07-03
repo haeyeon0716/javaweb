@@ -1,5 +1,6 @@
 package com.webjjang.image.controller;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -107,6 +108,10 @@ public class ImageController {
 				// 이미지 업로드 처리
 				// new MultipartRequest(request, 실제저장위치, 사이즈제한,
 				// 			encoding, 중복처리객체-파일이름뒤에 cnt 붙임)
+				// file 객체 업로드 시 input의 name이 같으면 한개만 처리 가능
+				// = 같은 name을 가진 파일 입력 요소가 여러 개 있을 경우,
+				// MultipartRequest는 여러 파일을 구분해서 처리하지 못하고 하나의 파일만 처리
+				// = name을 다르게 해서 올리세요 file1, file2
 				MultipartRequest multi
 				= new MultipartRequest(request, realSavePath, sizeLimit,
 						"utf-8", new DefaultFileRenamePolicy() );
@@ -138,21 +143,21 @@ public class ImageController {
 				
 				break;
 			case "/image/updateForm.do":
-				System.out.println("4-1.이미지게시판 글수정 폼");
+				System.out.println("4-1.이미지게시판 수정 폼");
 				
 				// 사 -> 서버 : 글번호
 				no = Long.parseLong(request.getParameter("no"));
 				
 				// no맞는 데이터 DB에서 가져온다. BoardViewService
-				result = Execute.execute(Init.get("/image/view.do"),
-						new Long[]{no, 0L});
+				result = Execute.execute(Init.get("/image/view.do"), no );
 				// 가져온 데이터를 JSP로 보내기 위해서 request에 담는다.
 				request.setAttribute("vo", result);
 				
 				// jsp 정보
-				jsp = "board/updateForm";
+				jsp = "image/updateForm";
 				
 				break;
+				
 			case "/image/update.do":
 				System.out.println("4-2.이미지게시판 글수정 처리");
 				
@@ -196,7 +201,45 @@ public class ImageController {
 						+ request.getParameter("perPageNum");
 				
 				break;
-			case "0":
+				
+			case "/image/changeImage.do":
+				System.out.println("6.이미지 바꾸기 처리");
+				
+				// 파일 업로드 - cos - MultipartReqeust
+				multi
+				= new MultipartRequest(request, realSavePath, sizeLimit,
+						"utf-8", new DefaultFileRenamePolicy());
+				
+				// 데이터 수집(사용자->서버 : form - input - name)
+				no = Long.parseLong(multi.getParameter("no"));
+				fileName = multi.getFilesystemName("imageFile");
+				System.out.println("fileName = " + fileName);
+				
+				String deletefileName = multi.getParameter("deletefileName");
+				
+				// 변수 - vo 저장하고 Service - DB에 처리할 데이터만
+				vo = new ImageVO();
+				vo.setNo(no);
+				vo.setFileName(savePath + "/" + fileName);
+								
+				// DB 적용하는 처리문 작성. BoardUpdateservice
+				Execute.execute(Init.get(uri), vo);
+				
+				// 지난 이미지 파일은 지운다 
+				File deleteFile = 
+						new File(request.getServletContext().getRealPath(deletefileName));
+				if(deleteFile.exists()) deleteFile.delete();
+				
+				// 처리 결과 메시지 전달
+				session.setAttribute("msg", "이미지 변경에 성공 하셨습니다");
+				
+				
+				// 페이지 정보 받기 & uri에 붙이기
+				pageObject = PageObject.getInstance(request);
+				// 글보기로 자동 이동 -> jsp 정보를 작성해서 넘긴다.
+				jsp = "redirect:view.do?no=" + no + "&inc=0"
+						+ "&" + pageObject.getPageQuery();
+				break;
 				
 			default:
 				System.out.println("####################################");;

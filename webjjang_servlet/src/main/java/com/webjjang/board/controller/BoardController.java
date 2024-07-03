@@ -80,10 +80,12 @@ public class BoardController {
 				
 				jsp = "board/view";
 				break;
+				
 			case "/board/writeForm.do":
 				System.out.println("3-1.일반게시판 글등록 폼");
 				jsp="board/writeForm";
 				break;
+				
 			case "/board/write.do":
 				System.out.println("3.일반게시판 글등록 처리");
 				
@@ -109,6 +111,7 @@ public class BoardController {
 						+ request.getParameter("perPageNum");
 				
 				break;
+				
 			case "/board/updateForm.do":
 				System.out.println("4-1.일반게시판 글수정 폼");
 				
@@ -125,6 +128,7 @@ public class BoardController {
 				jsp = "board/updateForm";
 				
 				break;
+				
 			case "/board/update.do":
 				System.out.println("4-2.일반게시판 글수정 처리");
 				

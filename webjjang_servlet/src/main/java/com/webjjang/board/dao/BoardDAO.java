@@ -342,16 +342,20 @@ public class BoardDAO extends DAO{
 	
 	final String INCREASE = "update board set hit = hit + 1 "
 			+ " where no = ?"; 
+	
 	final String VIEW= "select no, title, content, writer, "
 			+ " to_char(writeDate, 'yyyy-mm-dd') writeDate, hit "
 			+ " from board "
 			+ " where no = ?";
+	
 	final String WRITE = "insert into board "
 			+ " (no, title, content, writer, pw) "
 			+ " values(board_seq.nextval, ?, ?, ?, ?)"; 
+	
 	final String UPDATE= "update board "
 			+ " set title = ?, content = ?, writer = ? "
 			+ " where no = ? and pw = ?"; 
+	
 	final String DELETE= "delete from board "
 			+ " where no = ? and pw = ?"; 
 	
