@@ -31,7 +31,7 @@ $(function(){
 		// 글번호 필요 - 수집
 		let no = $(this).find(".no").text();
 		console.log("no = " + no);
-		location="view.do?no=" + no + "&inc=1&${pageObject.pageQuery}";
+		location="view.do?no=" + no + "&${pageObject.pageQuery}";
 	});
 	
 	// perPageNum 처리
@@ -99,7 +99,7 @@ $(function(){
   </form>
   <c:if test="${empty list }">
 	 <div class="jumbotron">
-	    <h4>데이터가 존재하지 않습니다.</h4>      
+	    <h4>데이터가 존재하지 않습니다.</h4> 
 	  </div>
   </c:if>
   <c:if test="${!empty list }">
@@ -136,11 +136,11 @@ $(function(){
 		<pageNav:pageNav listURI="list.do" pageObject="${pageObject }" />
 	</div>
 	
+  </c:if>
 	<c:if test="${ !empty login }">
 		<!-- 로그인이 되어있으면 보이게 하자. -->
 		<a href="writeForm.do?perPageNum=${pageObject.perPageNum }" class="btn btn-primary">등록</a>
 	</c:if>
-  </c:if>
 </div>
 </body>
 </html>

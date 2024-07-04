@@ -171,24 +171,29 @@ public class ImageController {
 				vo.setNo(no);
 				vo.setTitle(title);
 				vo.setContent(content);
+				// session의 로그인 정보에서 꺼낸다. 위쪽 코드 참조
+				vo.setId(id);
 				
 				// DB 적용하는 처리문 작성. BoardUpdateservice
 				Execute.execute(Init.get(uri), vo);
 				
 				// 페이지 정보 받기 & uri에 붙이기
 				pageObject = PageObject.getInstance(request);
+				// 메세지 처리
+				session.setAttribute("msg", "이미지 게시판 정보가 수정 되었습니다.");
 				// 글보기로 자동 이동 -> jsp 정보를 작성해서 넘긴다.
 				jsp = "redirect:view.do?no=" + no + "&inc=0"
 						+ "&" + pageObject.getPageQuery();
 				break;
 			case "/image/delete.do":
 				System.out.println("5.이미지게시판 글삭제");
-				// 데이터 수집 - DB에서 실행에 필요한 데이터 - 글번호, 비밀번호 - BoardVO
+				// 데이터 수집 - DB에서 실행에 필요한 데이터 - 글번호, id - ImageVO
 				
 				no = Long.parseLong(request.getParameter("no"));
 				
-				BoardVO deleteVO = new BoardVO();
+				ImageVO deleteVO = new ImageVO();
 				deleteVO.setNo(no);
+				deleteVO.setId(id);
 				
 				// DB 처리
 				Execute.execute(Init.get(uri), deleteVO);
@@ -197,8 +202,19 @@ public class ImageController {
 				System.out.println("**  " + deleteVO.getNo()+ "글이 삭제되었습니다.  **");
 				System.out.println("***************************");
 				
+				// file 삭제 
+				// 삭제할 파일 이름
+				String deleteFileName = request.getParameter("deleteFileName");
+				
+				// 삭제
+				File deleteFile = new File(request.getServletContext().getRealPath(deleteFileName));
+				if(deleteFile.exists()) deleteFile.delete();
+				
 				jsp = "redirect:list.do?perPageNum=" 
 						+ request.getParameter("perPageNum");
+				
+				// 메세지 처리 
+				session.setAttribute("msg", "이미지 게시글이 삭제 되었습니다");
 				
 				break;
 				
@@ -215,7 +231,7 @@ public class ImageController {
 				fileName = multi.getFilesystemName("imageFile");
 				System.out.println("fileName = " + fileName);
 				
-				String deletefileName = multi.getParameter("deletefileName");
+				deleteFileName = multi.getParameter("deleteFileName");
 				
 				// 변수 - vo 저장하고 Service - DB에 처리할 데이터만
 				vo = new ImageVO();
@@ -226,8 +242,8 @@ public class ImageController {
 				Execute.execute(Init.get(uri), vo);
 				
 				// 지난 이미지 파일은 지운다 
-				File deleteFile = 
-						new File(request.getServletContext().getRealPath(deletefileName));
+				deleteFile = 
+						new File(request.getServletContext().getRealPath(deleteFileName));
 				if(deleteFile.exists()) deleteFile.delete();
 				
 				// 처리 결과 메시지 전달
