@@ -76,9 +76,13 @@ public class ImageDAO extends DAO{
 			// 1. 드라이버 확인 - DB
 			// 2. 연결
 			con = DB.getConnection();
-			// 3. sql - 아래 LIST
+			// 3. sql - 아래 TOTALROW
+			System.out.println("imageDAO.getTotalRow().sql : " + TOTALROW + getSearch(pageObject, true) );
 			// 4. 실행 객체 & 데이터 세팅
-			pstmt = con.prepareStatement(TOTALROW + getSearch(pageObject));
+			
+			pstmt = con.prepareStatement(TOTALROW 
+					// 전체 데이터 개수 쿼리인 경우 검색 조건이 있으면 where를 붙여라 true
+					+ getSearch(pageObject, true));
 			int idx = 0;
 			idx = setSearchData(pageObject, pstmt, idx);
 			// 5. 실행
@@ -313,8 +317,8 @@ public class ImageDAO extends DAO{
 	// LIST에 검색을 처리해서 만들지는 sql문 작성 메서드
 	private String getListSQL(PageObject pageObject) {
 		String sql = LIST; 
-		String word = pageObject.getWord();
-		// if(word != null && !word.equals("")) sql += getSearch(pageObject);
+		// 검색 쿼리 추가 - where를 추가 안한다 : false
+		sql += getSearch(pageObject, false);
 		sql += " and (m.id = i.id) ";
 		sql += " order by no desc "
 				+ " ) "
@@ -323,17 +327,23 @@ public class ImageDAO extends DAO{
 	}
 	
 	// 리스트의 검색만 처리하는 쿼리 - where
-	private String getSearch(PageObject pageObject) {
+	// list(), getTotalRow() 에서 사용한다. list는 where 반드시 넣는다 . 이미 있다 
+	// getTotalRow() where가 없다. 그래서 검색 있는 경우 where 추가해야 
+	private String getSearch(PageObject pageObject, boolean isWhere) {
 		String sql = "";
 		String key = pageObject.getKey();
 		String word = pageObject.getWord();
 		if(word != null && !word.equals("")) {
-			sql += " where 1=0 ";
+			// where 붙이기 처리
+			if(isWhere) sql += " where 1=1 ";
+			sql += " and ( 1=0 ";
 		// key안에 t가 포함되어 있으면 title로 검색을 한다.
 			if(key.indexOf("t") >= 0) sql += " or title like ? ";
 			if(key.indexOf("c") >= 0) sql += " or content like ? ";
-			if(key.indexOf("w") >= 0) sql += " or writer like ? ";
+			if(key.indexOf("f") >= 0) sql += " or fileName like ? ";
+			sql += " ) ";
 		}
+		
 		return sql;
 		
 	}
@@ -347,7 +357,7 @@ public class ImageDAO extends DAO{
 			// key안에 t가 포함되어 있으면 title로 검색을 한다.
 			if(key.indexOf("t") >= 0) pstmt.setString(++idx, "%" + word + "%");
 			if(key.indexOf("c") >= 0) pstmt.setString(++idx, "%" + word + "%");
-			if(key.indexOf("w") >= 0) pstmt.setString(++idx, "%" + word + "%");
+			if(key.indexOf("f") >= 0) pstmt.setString(++idx, "%" + word + "%");
 		}
 		return idx;
 	}
