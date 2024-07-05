@@ -160,7 +160,7 @@ public class BoardDAO extends DAO{
 			} // end of if
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			throw new Exception("예외 발생 : 일반 게시판 글 보기 DB 처리중 오류 발생");
 		} finally {
 			// 7. 닫기
 			DB.close(con, pstmt, rs);
@@ -344,7 +344,7 @@ public class BoardDAO extends DAO{
 			+ " where no = ?"; 
 	
 	final String VIEW= "select no, title, content, writer, "
-			+ " to_char(writeDate, 'yyyy-mm-dd') writeDate, hit "
+			+ " to_char(writeDate, 'yyyy-mm-dd') writeDate, hit, "
 			+ " from board "
 			+ " where no = ?";
 	
