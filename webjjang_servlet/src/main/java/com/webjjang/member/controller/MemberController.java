@@ -132,10 +132,12 @@ public class MemberController {
 				
 				jsp = "board/view";
 				break;
+				
 			case "/member/writeForm.do":
-				System.out.println("3-1.일반게시판 글등록 폼");
-				jsp="board/writeForm";
+				System.out.println("3-1.회원가입 폼");
+				jsp="member/writeForm";
 				break;
+				
 			case "/member/write.do":
 				System.out.println("3.일반게시판 글등록 처리");
 				
@@ -161,6 +163,7 @@ public class MemberController {
 						+ request.getParameter("perPageNum");
 				
 				break;
+				
 			case "/member/updateForm.do":
 				System.out.println("4-1.일반게시판 글수정 폼");
 				

@@ -24,6 +24,7 @@ import com.webjjang.image.service.ImageWriteService;
 import com.webjjang.main.dao.DAO;
 import com.webjjang.main.service.Service;
 import com.webjjang.member.dao.MemberDAO;
+import com.webjjang.member.service.MemberCheckIdService;
 import com.webjjang.member.service.MemberLoginService;
 
 public class Init {
@@ -68,8 +69,10 @@ public class Init {
 		daoMap.put("memberDAO", new MemberDAO());
 		
 		serviceMap.put("/member/login.do", new MemberLoginService());
+		serviceMap.put("/ajax/checkId.do", new MemberCheckIdService());
 
 		serviceMap.get("/member/login.do").setDAO(daoMap.get("memberDAO"));
+		serviceMap.get("/ajax/checkId.do").setDAO(daoMap.get("memberDAO"));
 
 		// ---- [이미지 게시판 객체 생성과 조립 ] -----------------------
 		// dao 생성
