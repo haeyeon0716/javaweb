@@ -344,7 +344,7 @@ public class BoardDAO extends DAO{
 			+ " where no = ?"; 
 	
 	final String VIEW= "select no, title, content, writer, "
-			+ " to_char(writeDate, 'yyyy-mm-dd') writeDate, hit, "
+			+ " to_char(writeDate, 'yyyy-mm-dd') writeDate, hit "
 			+ " from board "
 			+ " where no = ?";
 	
