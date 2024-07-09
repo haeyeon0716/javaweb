@@ -92,6 +92,13 @@
 		    <li class="nav-item ${(module == '/board')?'active':'' }">
 		      <a class="nav-link" href="/board/list.do">일반게시판</a>
 		    </li>
+		    
+		    <!-- 관리자 메뉴 -->
+		    <c:if test="${!empty login && login.gradeNo == 9 }">
+			    <li class="nav-item ${(module == '/member')?'active':'' }">
+			      <a class="nav-link" href="/member/list.do">회원 리스트</a>
+			    </li>
+		    </c:if>
 		  </ul>
 		  <ul class="navbar-nav">
 		  	<c:if test="${ empty login }">
@@ -116,15 +123,27 @@
 			    </li>
 		    </c:if>
 		  	<c:if test="${ !empty login }">
-			  	<!-- 로그인을 했을 때 -->
+			  	
+			    <li class="nav-item">
+			      <span class="nav-link" >
+			      	<c:if test="${empty login.photo }">
+			      		<i class="fa fa-user-circle-o"></i>
+			      	</c:if>
+			      	<c:if test="${!empty login.photo }">
+			      		<img src="${login.photo }" class ="rounded-circle" style="width:30px; height:30px;">
+			      	</c:if>
+			      </span>
+			    </li>
+			    
+			    <li class="nav-item">
+			      <a class="nav-link" href="/member/view.do">내정보보기</a>
+			    </li>
+			    <!-- 로그인을 했을 때 -->
 			    <li class="nav-item">
 			      <a class="nav-link" href="/member/logout.do">
 			      	<i 	class="fa fa-sign-out"></i>
 			      	로그아웃
 			      </a>
-			    </li>
-			    <li class="nav-item">
-			      <a class="nav-link" href="/member/view.do">내정보보기</a>
 			    </li>
 			    <li class="nav-item">
 			      <a class="nav-link" href="/cart/list.do">장바구니</a>
