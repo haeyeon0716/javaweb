@@ -25,6 +25,7 @@ public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	// Controller 선언과 생성 - 1번만 된다.
+	private MainController mainController = new MainController();
 	private BoardController boardController = new BoardController();
 	private BoardReplyController boardReplyController
 		= new BoardReplyController();
@@ -89,11 +90,16 @@ public class DispatcherServlet extends HttpServlet {
 		
 		switch (module) {
 		
+		case "/main":
+			System.out.println("회원 관리");
+			jsp = mainController.execute(request);
+			break;
+			
 		case "/member":
 			System.out.println("회원 관리");
 			jsp = memberController.execute(request);
 			break;
-
+			
 		case "/board":
 			System.out.println("일반 게시판");
 			jsp = boardController.execute(request);
@@ -113,6 +119,7 @@ public class DispatcherServlet extends HttpServlet {
 			System.out.println("아이디 중복 체크");
 			jsp = ajaxController.execute(request);
 			break;
+			
 			
 		default:
 			request.setAttribute("uri", request.getRequestURI());
