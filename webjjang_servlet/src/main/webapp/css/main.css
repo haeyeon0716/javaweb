@@ -15,9 +15,8 @@
  	cursor: pointer;
 }
 
- 
 .boardLink:hover{
- 	background: #ddd;
+ 	background: #f2f2f2;
  	cursor: pointer;
  }
  

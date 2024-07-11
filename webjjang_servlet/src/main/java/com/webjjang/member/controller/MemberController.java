@@ -21,8 +21,7 @@ import com.webjjang.member.vo.MemberVO;
 import com.webjjang.util.page.PageObject;
 import com.webjjang.util.page.ReplyPageObject;
 import com.webjjang.util.exe.Execute;
-import com.webjjang.util.io.BoardPrint;
-import com.webjjang.util.io.In;
+
 
 // Member Module 에 맞는 메뉴 선택 , 데이터 수집(기능별), 예외 처리
 public class MemberController {

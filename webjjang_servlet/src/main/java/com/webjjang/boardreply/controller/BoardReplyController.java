@@ -3,19 +3,12 @@ package com.webjjang.boardreply.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.webjjang.board.service.BoardDeleteService;
-import com.webjjang.board.service.BoardListService;
-import com.webjjang.board.service.BoardUpdateService;
-import com.webjjang.board.service.BoardViewService;
-import com.webjjang.board.service.BoardWriteService;
-import com.webjjang.board.vo.BoardVO;
+
 import com.webjjang.boardreply.vo.BoardReplyVO;
 import com.webjjang.main.controller.Init;
-import com.webjjang.util.page.PageObject;
 import com.webjjang.util.page.ReplyPageObject;
 import com.webjjang.util.exe.Execute;
-import com.webjjang.util.io.BoardPrint;
-import com.webjjang.util.io.In;
+
 
 // Board Module 에 맞는 메뉴 선택 , 데이터 수집(기능별), 예외 처리
 public class BoardReplyController {

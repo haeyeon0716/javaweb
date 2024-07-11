@@ -30,6 +30,12 @@ import com.webjjang.member.service.MemberCheckIdService;
 import com.webjjang.member.service.MemberListService;
 import com.webjjang.member.service.MemberLoginService;
 import com.webjjang.member.service.MemberWriteService;
+import com.webjjang.notice.dao.NoticeDAO;
+import com.webjjang.notice.service.NoticeDeleteService;
+import com.webjjang.notice.service.NoticeListService;
+import com.webjjang.notice.service.NoticeUpdateService;
+import com.webjjang.notice.service.NoticeViewService;
+import com.webjjang.notice.service.NoticeWriteService;
 
 public class Init {
 
@@ -103,6 +109,24 @@ public class Init {
 		serviceMap.get("/image/update.do").setDAO(daoMap.get("imageDAO"));
 		serviceMap.get("/image/delete.do").setDAO(daoMap.get("imageDAO"));
 		serviceMap.get("/image/changeImage.do").setDAO(daoMap.get("imageDAO"));
+		
+		// ---- [공지사항 객체 생성과 조립 ] -----------------------
+		// dao 생성
+		daoMap.put("noticeDAO", new NoticeDAO());
+		
+		// service 
+		serviceMap.put("/notice/list.do", new NoticeListService());
+		serviceMap.put("/notice/view.do", new NoticeViewService());
+		serviceMap.put("/notice/write.do", new NoticeWriteService());
+		serviceMap.put("/notice/update.do", new NoticeUpdateService());
+		serviceMap.put("/notice/delete.do", new NoticeDeleteService());
+		
+		// 조립 dao->service
+		serviceMap.get("/notice/list.do").setDAO(daoMap.get("noticeDAO"));
+		serviceMap.get("/notice/view.do").setDAO(daoMap.get("noticeDAO"));
+		serviceMap.get("/notice/write.do").setDAO(daoMap.get("noticeDAO"));
+		serviceMap.get("/notice/update.do").setDAO(daoMap.get("noticeDAO"));
+		serviceMap.get("/notice/delete.do").setDAO(daoMap.get("noticeDAO"));
 		
 		
 		System.out.println("Init.static 초기화 블록 ----- 객체 생성과 로딩 ------");

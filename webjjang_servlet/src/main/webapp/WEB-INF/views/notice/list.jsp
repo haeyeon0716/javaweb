@@ -63,9 +63,6 @@ $(function(){
 			      	<option value="c">내용</option>
 			      	<option value="w">작성자</option>
 			      	<option value="tc">제목/내용</option>
-			      	<option value="tw">제목/작성자</option>
-			      	<option value="cw">내용/작성자</option>
-			      	<option value="tcw">모두</option>
 			      </select>
 			  </div>
 			  <input type="text" class="form-control" placeholder="검색"
@@ -103,9 +100,10 @@ $(function(){
 		<tr>
 			<th>번호</th>
 			<th>제목</th>
-			<th>작성자</th>
-			<th>작성일</th>
-			<th>조회수</th>
+			<th>게시일</th>
+			<th>종료일</th>
+			<th>수정일</th>
+	
 		</tr>
 		<!-- 실제적인 데이터 표시 : 데이터가 있는 만큼 줄(tr)이 생긴다. -->
 		<!-- JS로 글보기로 페이지 이동
@@ -115,9 +113,10 @@ $(function(){
 				<!-- td : table data - 테이블 데이터 텍스트 -->
 				<td class="no">${vo.no}</td>
 				<td>${vo.title}</td>
-				<td>${vo.writer }</td>
-				<td>${vo.writeDate}</td>
-				<td>${vo.hit}</td>
+				<td>${vo.startDate}</td>
+				<td>${vo.endDate}</td>
+				<td>${vo.updateDate}</td>
+				
 			</tr>
 		</c:forEach>
 		<tr>
