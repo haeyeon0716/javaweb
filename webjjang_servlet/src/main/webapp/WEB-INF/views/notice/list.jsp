@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>일반 게시판 리스트</title>
+<title>공지사항</title>
 <style type="text/css">
 /* 이곳을 주석입니다. Ctrl + Shift + C로 자동 주석 가능. 그러나 푸는 건 안된다.
 	선택자 {스타일 항목 : 스타일 값;스타일 항목 : 스타일 값;...}
@@ -25,6 +25,19 @@
 
 <script type="text/javascript">
 $(function(){
+	if("${pageObject.period}" == "pre") {
+		$("#pre").prop('checked', true);
+	}
+	else if("${pageObject.period}" == "old") {
+		$("#old").prop('checked', true);
+	}
+	else if("${pageObject.period}" == "res") {
+		$("#res").prop('checked', true);
+	}
+	else if("${pageObject.period}" == "all") {
+		$("#all").prop('checked', true);
+	}
+	
 	// 이벤트 처리
 	$(".dataRow").click(function(){
 		// alert("click");
@@ -45,6 +58,26 @@ $(function(){
 	$("#key").val("${(empty pageObject.key)?'t':pageObject.key}");
 	$("#perPageNum")
 		.val("${(empty pageObject.perPageNum)?'10':pageObject.perPageNum}");
+	$(".noticeOption").change(function () {
+		// alert("radio button change");
+		if (this.optionList[0].checked) {
+			// alert("pre notice");
+			location = "/notice/list.do?period=pre";
+			
+		}
+		else if (this.optionList[1].checked) {
+			// alert("old notice"); 
+			location = "/notice/list.do?period=old";
+		}
+		else if (this.optionList[2].checked) {
+			// alert("res notice");
+			location = "/notice/list.do?period=res";
+		}
+		else if (this.optionList[3].checked) {
+			// alert("all notice");
+			location = "/notice/list.do?period=all";
+		}
+	})
 });
 </script>
 
@@ -61,7 +94,6 @@ $(function(){
 			      <select name="key" id="key" class="form-control">
 			      	<option value="t">제목</option>
 			      	<option value="c">내용</option>
-			      	<option value="w">작성자</option>
 			      	<option value="tc">제목/내용</option>
 			      </select>
 			  </div>
@@ -93,6 +125,9 @@ $(function(){
 	  	</div>
 	  	<!-- col-md-4의 끝 : 한페이지당 표시 데이터 개수 -->
 	  </div>
+	  <c:if test="${!empty login && login.gradeNo == 9 }">
+	  	
+	  </c:if>
   </form>
 	<table class="table">
 		<!-- tr : table row - 테이블 한줄 -->
@@ -119,12 +154,36 @@ $(function(){
 				
 			</tr>
 		</c:forEach>
-		<tr>
-			<td colspan="5">
-				<!-- a tag : 데이터를 클릭하면 href의 정보를 가져와서 페이지 이동시킨다. -->
-				<a href="writeForm.do?perPageNum=${pageObject.perPageNum }" class="btn btn-primary">등록</a>
-			</td>
-		</tr>
+		<c:if test="${!empty login && login.gradeNo == 9 }">
+			<tr>
+				<td colspan="5">
+					<!-- a tag : 데이터를 클릭하면 href의 정보를 가져와서 페이지 이동시킨다. -->
+					<a href="writeForm.do?perPageNum=${pageObject.perPageNum }" class="btn btn-primary">등록</a>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="5">
+				<form class ="noticeOption">
+				  <div class="custom-control custom-radio custom-control-inline">
+				    <input type="radio" class="custom-control-input" id="pre" name="optionList" value="pre">
+				    <label class="custom-control-label" for="pre">현재공지</label>
+				  </div>
+				  <div class="custom-control custom-radio custom-control-inline">
+				    <input type="radio" class="custom-control-input" id="old" name="optionList" value="old">
+				    <label class="custom-control-label" for="old">이전공지</label>
+				  </div>
+				  <div class="custom-control custom-radio custom-control-inline">
+				    <input type="radio" class="custom-control-input" id="res" name="optionList" value="res">
+				    <label class="custom-control-label" for="res">예정공지</label>
+				  </div>
+				  <div class="custom-control custom-radio custom-control-inline">
+				    <input type="radio" class="custom-control-input" id="all" name="optionList" value="all">
+				    <label class="custom-control-label" for="all">모든 공지</label>
+				  </div>
+				</form>
+				</td>
+			</tr>
+		</c:if>
 	</table>
 	<div><pageNav:pageNav listURI="list.do" pageObject="${pageObject }"></pageNav:pageNav></div>
 </div>

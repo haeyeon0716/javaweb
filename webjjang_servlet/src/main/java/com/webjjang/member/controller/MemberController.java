@@ -1,20 +1,14 @@
 package com.webjjang.member.controller;
 
 import java.io.File;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-import com.webjjang.board.service.BoardDeleteService;
-import com.webjjang.board.service.BoardListService;
-import com.webjjang.board.service.BoardUpdateService;
-import com.webjjang.board.service.BoardViewService;
-import com.webjjang.board.service.BoardWriteService;
+
 import com.webjjang.board.vo.BoardVO;
-import com.webjjang.image.vo.ImageVO;
 import com.webjjang.main.controller.Init;
 import com.webjjang.member.vo.LoginVO;
 import com.webjjang.member.vo.MemberVO;

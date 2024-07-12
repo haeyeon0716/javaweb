@@ -271,6 +271,17 @@ public class NoticeDAO extends DAO {
 	private String getListSQL(PageObject pageObject) {
 		String sql = LIST;
 		String word = pageObject.getWord();
+		
+		if(pageObject.getPeriod().equals("pre")) {
+			sql += " where (startDate <= sysDate) and (endDate >= sysDate)";
+		}
+		else if(pageObject.getPeriod().equals("old")) {
+			sql += " where (endDate < sysDate)";
+		}
+		else if(pageObject.getPeriod().equals("res")) {
+			sql += " where (startDate > sysDate)";
+		}
+		
 		if (word != null && !word.equals(""))
 			sql += getSearch(pageObject);
 		sql += " order by updateDate desc, no desc" + " ) " + " ) where rnum between ? and ? ";
@@ -282,13 +293,12 @@ public class NoticeDAO extends DAO {
 		String sql = "";
 		String key = pageObject.getKey();
 		String word = pageObject.getWord();
+		
 		if (word != null && !word.equals("")) {
 			sql += " where 1=0 ";
 			// key안에 t가 포함되어 있으면 title로 검색을 한다.
-			if (key.indexOf("t") >= 0)
-				sql += " or title like ? ";
-			if (key.indexOf("c") >= 0)
-				sql += " or content like ? ";
+			if (key.indexOf("t") >= 0) sql += " or title like ? ";
+			if (key.indexOf("c") >= 0) sql += " or content like ? ";
 		}
 		return sql;
 
