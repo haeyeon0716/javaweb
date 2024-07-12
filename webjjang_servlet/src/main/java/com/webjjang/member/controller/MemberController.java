@@ -84,7 +84,7 @@ public class MemberController {
 				// 아니면 jsp로 forward로 시킨다.
 				// 원래는 main이나 진행하려고 했던 uri로 이동시킨다.
 				// 그러나 완성이 안되어 있어서 완성되어진 게시판 리스트로 보낸다.
-				jsp = "redirect:/board/list.do";
+				jsp = "redirect:/";
 				
 				// 로그인 완료 메시지 처리
 				session.setAttribute("msg", "로그인 처리가 되었습니다.");
@@ -97,7 +97,7 @@ public class MemberController {
 				
 				session.setAttribute("msg", "로그아웃 되었습니다.");
 				
-				jsp = "redirect:/board/list.do";
+				jsp = "redirect:/";
 				break;
 				
 			case "/member/list.do": // 관리자만 가능 

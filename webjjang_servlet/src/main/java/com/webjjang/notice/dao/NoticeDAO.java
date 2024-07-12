@@ -28,6 +28,8 @@ public class NoticeDAO extends DAO {
 			// 3. sql - 아래 LIST
 			// 4. 실행 객체 & 데이터 세팅
 			pstmt = con.prepareStatement(getListSQL(pageObject));
+			
+			System.out.println("NoticeDAO.list() = " + getListSQL(pageObject) );
 
 			// 검색에 대한 데이터 세팅 - list()만 사용
 			int idx = 0; // pstmt의 순서번호 사용. 먼저 1 증가하고 사용한다.
@@ -262,6 +264,7 @@ public class NoticeDAO extends DAO {
 			+ " to_char(endDate, 'yyyy-mm-dd') endDate, "
 			+ " to_char(updateDate, 'yyyy-mm-dd') updateDate "
 			+ " from notice "
+			+ " where (1 = 1) "
 	// 여기에 검색이 있어야 합니다.
 	;
 	// 검색이 있는 경우 TOTALROW + search문
@@ -270,21 +273,13 @@ public class NoticeDAO extends DAO {
 	// LIST에 검색을 처리해서 만들지는 sql문 작성 메서드
 	private String getListSQL(PageObject pageObject) {
 		String sql = LIST;
-		String word = pageObject.getWord();
+		sql += getSearch(pageObject);
+		sql += getPeriod(pageObject);
 		
-		if(pageObject.getPeriod().equals("pre")) {
-			sql += " where (startDate <= sysDate) and (endDate >= sysDate)";
-		}
-		else if(pageObject.getPeriod().equals("old")) {
-			sql += " where (endDate < sysDate)";
-		}
-		else if(pageObject.getPeriod().equals("res")) {
-			sql += " where (startDate > sysDate)";
-		}
+		sql += " order by updateDate desc, no desc" 
+				+ " ) " 
+				+ " ) where rnum between ? and ? ";
 		
-		if (word != null && !word.equals(""))
-			sql += getSearch(pageObject);
-		sql += " order by updateDate desc, no desc" + " ) " + " ) where rnum between ? and ? ";
 		return sql;
 	}
 
@@ -295,13 +290,37 @@ public class NoticeDAO extends DAO {
 		String word = pageObject.getWord();
 		
 		if (word != null && !word.equals("")) {
-			sql += " where 1=0 ";
+			sql += " and ( 1=0 ";
 			// key안에 t가 포함되어 있으면 title로 검색을 한다.
 			if (key.indexOf("t") >= 0) sql += " or title like ? ";
 			if (key.indexOf("c") >= 0) sql += " or content like ? ";
+			sql += ")";
 		}
 		return sql;
 
+	}
+	
+	// 리스트의 기간 검색만 처리하는 쿼리 - where
+	private String getPeriod(PageObject pageObject) {
+		String sql = "";
+		String period = pageObject.getPeriod();
+		
+		sql += " and ( 1=1 ";
+			// period에 따라서 기간을 검색.
+			if (period.equals("pre"))
+				sql += " and trunc(sysdate) between trunc(startDate) and trunc(endDate) ";
+			else if (period.equals("old")) // 지난 공지
+				sql += " and trunc(sysdate) > trunc(endDate) ";
+			
+			else if (period.equals("res")) // 예약공지
+				sql += " and trunc(sysdate) < trunc(startDate)";
+			
+			else sql += ""; // 모든 공지
+			
+			sql += ")";
+		
+		return sql;
+		
 	}
 
 	// 검색 쿼리의 ? 데이터를 세팅하는 메서드
