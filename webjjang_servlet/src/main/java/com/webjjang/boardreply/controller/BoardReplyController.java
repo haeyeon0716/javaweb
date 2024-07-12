@@ -22,13 +22,10 @@ public class BoardReplyController {
 		// uri
 		String uri = request.getRequestURI();
 		
-		Object result = null;
 		
 		String jsp = null;
 		
 		
-		// 입력 받는 데이터 선언
-		Long no = 0L;
 		
 		try { // 정상 처리
 			

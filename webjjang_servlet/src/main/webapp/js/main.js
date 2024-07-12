@@ -18,5 +18,10 @@
 			
 			location = "/image/view.do?no=" + no ;
 		}
+		else if($(this).hasClass("notice")) {
+			// alert("이미지 게시판 클릭");
+			
+			location = "/notice/view.do?no=" + no ;
+		}
 	});
  });

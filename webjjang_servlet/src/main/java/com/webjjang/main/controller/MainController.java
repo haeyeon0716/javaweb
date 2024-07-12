@@ -1,8 +1,10 @@
 package com.webjjang.main.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.webjjang.util.page.PageObject;
+import com.webjjang.member.vo.LoginVO;
 import com.webjjang.util.exe.Execute;
 
 
@@ -18,6 +20,15 @@ public class MainController {
 		
 		String jsp = null;
 		
+		HttpSession session = request.getSession();
+		
+		int gradeNo = 0;
+		
+		LoginVO login = (LoginVO) session.getAttribute("login");
+		if(login != null) {
+			gradeNo = login.getGradeNo();
+		}
+		
 		
 		try { // 정상 처리
 		
@@ -29,8 +40,22 @@ public class MainController {
 				// getInstance - 기본 값이 있고 넘어오는 페이지와 검색 정보를 세팅 처리
 				PageObject pageObject = new PageObject();
 				
+				if(gradeNo == 9) {
+					pageObject.setPeriod("all");
+					
+				} else {
+					pageObject.setPeriod("all");
+					
+				}
+				
 				// 메인에 표시할 데이터 - 일반 게시판 / 이미지 게시판
 				// DB에서 데이터 가져오기
+				
+				// 공지사항
+				pageObject.setPerPageNum(7);
+				// [MainController] - (Execute) - NoticeListService - NoticeDAO.list()
+				result = Execute.execute(Init.get("/notice/list.do"), pageObject);
+				request.setAttribute("noticelist", result);
 				
 				// 일반 게시판
 				pageObject.setPerPageNum(7);
