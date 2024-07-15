@@ -28,6 +28,10 @@
 
 	<style type="text/css">
 	
+	.container {
+		padding: 25px 5px;
+	}
+	
 	pre {
 		background: white;
 		border: 0px;
@@ -60,6 +64,7 @@
 	
 	article {
 		min-height: 795px;
+		margin-top: 60px;
 	}
 	
 	#welcome {
@@ -73,7 +78,7 @@
 </head>
 <body>
 	<header>
-		<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+		<nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
 	      <a class="nav-link" href="/">웹짱닷컴</a>
 	      
 	      <!-- 보여지는 너비가 작은 경우 나타나는 메뉴 줄임 햄버거 버튼 -->

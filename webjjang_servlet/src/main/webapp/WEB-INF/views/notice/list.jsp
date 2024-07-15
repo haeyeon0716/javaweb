@@ -72,7 +72,7 @@
 </head>
 <body>
 	<div class="container">
-		<h1>일반 게시판 리스트</h1>
+		<h1>공지사항</h1>
 		<c:if test="${!empty login && login.gradeNo == 9 }">
 			<form class="noticeOption">
 				<div class="custom-control custom-radio custom-control-inline">
