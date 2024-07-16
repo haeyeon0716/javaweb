@@ -36,6 +36,9 @@ import com.webjjang.notice.service.NoticeListService;
 import com.webjjang.notice.service.NoticeUpdateService;
 import com.webjjang.notice.service.NoticeViewService;
 import com.webjjang.notice.service.NoticeWriteService;
+import com.webjjang.qna.dao.QnaDAO;
+import com.webjjang.qna.service.QnaListService;
+import com.webjjang.qna.service.QnaWriteService;
 
 public class Init {
 
@@ -43,7 +46,7 @@ public class Init {
 	private static Map<String, Service> serviceMap = new HashMap<>();
 	// dao 생성해서 저장하는 객체 - <className, dao>
 	private static Map<String, DAO> daoMap = new HashMap<>();
-	
+
 	// static 변수에 데이터를 초기화 시키는 1번만 실행되는 블록 -> 클래스가 불려지만 자동실행
 	static {
 		// ---- [일반 게시판 객체 생성과 조립 ] -----------------------
@@ -61,15 +64,15 @@ public class Init {
 		serviceMap.get("/board/write.do").setDAO(daoMap.get("boardDAO"));
 		serviceMap.get("/board/update.do").setDAO(daoMap.get("boardDAO"));
 		serviceMap.get("/board/delete.do").setDAO(daoMap.get("boardDAO"));
-		
+
 		// ---- [일반 게시판 댓글 객체 생성과 조립 ] -----------------------
 		daoMap.put("replyBoardDAO", new BoardReplyDAO());
-		
+
 		serviceMap.put("/boardreply/list.do", new BoardReplyListService());
 		serviceMap.put("/boardreply/write.do", new BoardReplyWriteService());
 		serviceMap.put("/boardreply/update.do", new BoardReplyUpdateService());
 		serviceMap.put("/boardreply/delete.do", new BoardReplyDeleteService());
-		
+
 		serviceMap.get("/boardreply/list.do").setDAO(daoMap.get("replyBoardDAO"));
 		serviceMap.get("/boardreply/write.do").setDAO(daoMap.get("replyBoardDAO"));
 		serviceMap.get("/boardreply/update.do").setDAO(daoMap.get("replyBoardDAO"));
@@ -77,7 +80,7 @@ public class Init {
 
 		// ---- [회원관리 객체 생성과 조립 ] -----------------------
 		daoMap.put("memberDAO", new MemberDAO());
-		
+
 		serviceMap.put("/member/login.do", new MemberLoginService());
 		serviceMap.put("/member/write.do", new MemberWriteService());
 		serviceMap.put("/member/list.do", new MemberListService());
@@ -109,31 +112,47 @@ public class Init {
 		serviceMap.get("/image/update.do").setDAO(daoMap.get("imageDAO"));
 		serviceMap.get("/image/delete.do").setDAO(daoMap.get("imageDAO"));
 		serviceMap.get("/image/changeImage.do").setDAO(daoMap.get("imageDAO"));
-		
+
 		// ---- [공지사항 객체 생성과 조립 ] -----------------------
 		// dao 생성
 		daoMap.put("noticeDAO", new NoticeDAO());
-		
-		// service 
+
+		// service
 		serviceMap.put("/notice/list.do", new NoticeListService());
 		serviceMap.put("/notice/view.do", new NoticeViewService());
 		serviceMap.put("/notice/write.do", new NoticeWriteService());
 		serviceMap.put("/notice/update.do", new NoticeUpdateService());
 		serviceMap.put("/notice/delete.do", new NoticeDeleteService());
-		
+
 		// 조립 dao->service
 		serviceMap.get("/notice/list.do").setDAO(daoMap.get("noticeDAO"));
 		serviceMap.get("/notice/view.do").setDAO(daoMap.get("noticeDAO"));
 		serviceMap.get("/notice/write.do").setDAO(daoMap.get("noticeDAO"));
 		serviceMap.get("/notice/update.do").setDAO(daoMap.get("noticeDAO"));
 		serviceMap.get("/notice/delete.do").setDAO(daoMap.get("noticeDAO"));
-		
-		
+
+		// dao 생성
+		daoMap.put("qnaDAO", new QnaDAO());
+
+		// service
+		serviceMap.put("/qna/list.do", new QnaListService());
+		serviceMap.put("/notice/view.do", new NoticeViewService());
+		serviceMap.put("/qna/write.do", new QnaWriteService());
+		serviceMap.put("/notice/update.do", new NoticeUpdateService());
+		serviceMap.put("/notice/delete.do", new NoticeDeleteService());
+
+		// 조립 dao->service
+		serviceMap.get("/qna/list.do").setDAO(daoMap.get("qnaDAO"));
+		serviceMap.get("/notice/view.do").setDAO(daoMap.get("noticeDAO"));
+		serviceMap.get("/qna/write.do").setDAO(daoMap.get("qnaDAO"));
+		serviceMap.get("/notice/update.do").setDAO(daoMap.get("noticeDAO"));
+		serviceMap.get("/notice/delete.do").setDAO(daoMap.get("noticeDAO"));
+
 		System.out.println("Init.static 초기화 블록 ----- 객체 생성과 로딩 ------");
 	}
-	
+
 	public static Service get(String uri) {
 		return serviceMap.get(uri);
 	}
-	
+
 }

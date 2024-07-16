@@ -13,6 +13,7 @@ import com.webjjang.boardreply.controller.BoardReplyController;
 import com.webjjang.image.controller.ImageController;
 import com.webjjang.member.controller.MemberController;
 import com.webjjang.notice.controller.NoticeController;
+import com.webjjang.qna.controller.QnaController;
 
 /**
  * Servlet implementation class DispatcherServlet
@@ -33,6 +34,7 @@ public class DispatcherServlet extends HttpServlet {
 	private ImageController imageController = new ImageController();
 	private AjaxController ajaxController = new AjaxController();
 	private NoticeController noticeController = new NoticeController();
+	private QnaController qnaController = new QnaController();
 	
 	/**
 	 * @see Servlet#init(ServletConfig)
@@ -122,8 +124,13 @@ public class DispatcherServlet extends HttpServlet {
 			break;
 			
 		case "/notice":
-			System.out.println("아이디 중복 체크");
+			System.out.println("공지사항 페이지");
 			jsp = noticeController.execute(request);
+			break;
+			
+		case "/qna":
+			System.out.println("질문답변 페이지");
+			jsp = qnaController.execute(request);
 			break;
 			
 			
