@@ -27,6 +27,7 @@ import com.webjjang.member.dao.MemberDAO;
 import com.webjjang.member.service.MemberChangeGradeService;
 import com.webjjang.member.service.MemberChangeStatusService;
 import com.webjjang.member.service.MemberCheckIdService;
+import com.webjjang.member.service.MemberConUpdateService;
 import com.webjjang.member.service.MemberListService;
 import com.webjjang.member.service.MemberLoginService;
 import com.webjjang.member.service.MemberWriteService;
@@ -38,6 +39,7 @@ import com.webjjang.notice.service.NoticeViewService;
 import com.webjjang.notice.service.NoticeWriteService;
 import com.webjjang.qna.dao.QnaDAO;
 import com.webjjang.qna.service.QnaListService;
+import com.webjjang.qna.service.QnaViewService;
 import com.webjjang.qna.service.QnaWriteService;
 
 public class Init {
@@ -86,13 +88,17 @@ public class Init {
 		serviceMap.put("/member/list.do", new MemberListService());
 		serviceMap.put("/member/changeGrade.do", new MemberChangeGradeService());
 		serviceMap.put("/member/changeStatus.do", new MemberChangeStatusService());
+		// member controller 에서 들어오지 않고 UpdateConDate Filter에서 들어옴
+		serviceMap.put("/member/updateConDate.do", new MemberConUpdateService());
 		serviceMap.put("/ajax/checkId.do", new MemberCheckIdService());
 
+		
 		serviceMap.get("/member/login.do").setDAO(daoMap.get("memberDAO"));
 		serviceMap.get("/member/write.do").setDAO(daoMap.get("memberDAO"));
 		serviceMap.get("/member/list.do").setDAO(daoMap.get("memberDAO"));
 		serviceMap.get("/member/changeGrade.do").setDAO(daoMap.get("memberDAO"));
 		serviceMap.get("/member/changeStatus.do").setDAO(daoMap.get("memberDAO"));
+		serviceMap.get("/member/updateConDate.do").setDAO(daoMap.get("memberDAO"));
 		serviceMap.get("/ajax/checkId.do").setDAO(daoMap.get("memberDAO"));
 
 		// ---- [이미지 게시판 객체 생성과 조립 ] -----------------------
@@ -136,14 +142,14 @@ public class Init {
 
 		// service
 		serviceMap.put("/qna/list.do", new QnaListService());
-		serviceMap.put("/notice/view.do", new NoticeViewService());
+		serviceMap.put("/qna/view.do", new QnaViewService());
 		serviceMap.put("/qna/write.do", new QnaWriteService());
 		serviceMap.put("/notice/update.do", new NoticeUpdateService());
 		serviceMap.put("/notice/delete.do", new NoticeDeleteService());
 
 		// 조립 dao->service
 		serviceMap.get("/qna/list.do").setDAO(daoMap.get("qnaDAO"));
-		serviceMap.get("/notice/view.do").setDAO(daoMap.get("noticeDAO"));
+		serviceMap.get("/qna/view.do").setDAO(daoMap.get("qnaDAO"));
 		serviceMap.get("/qna/write.do").setDAO(daoMap.get("qnaDAO"));
 		serviceMap.get("/notice/update.do").setDAO(daoMap.get("noticeDAO"));
 		serviceMap.get("/notice/delete.do").setDAO(daoMap.get("noticeDAO"));

@@ -101,49 +101,11 @@ public class QnaDAO extends DAO {
 		return totalRow;
 	} // end of getTotalRow()
 
-	// 2-1. 글보기 조회수 1증가 처리
-	// BoardController - (Execute) - BoardViewService - [BoardDAO.increase()]
-	public int increaseOrdNo(QnaVO vo) throws Exception {
+	// 2. 질문답변 보기 처리
+	// QnaController - (Execute) - QnaViewService - [QnaDAO.view()]
+	public QnaVO view(Long no) throws Exception {
 		// 결과를 저장할 수 있는 변수 선언.
-		int result = 0;
-
-		try {
-			// 1. 드라이버 확인 - DB
-			// 2. 연결
-			con = DB.getConnection();
-			// 3. sql - 아래 LIST
-			// 4. 실행 객체 & 데이터 세팅
-			pstmt = con.prepareStatement(INCREASEORDNO);
-			pstmt.setLong(1, vo.getRefNo());
-			pstmt.setLong(2, vo.getOrdNo());
-			// 5. 실행 - update : executeUpdate() -> int 결과가 나옴.
-			result = pstmt.executeUpdate();
-			// 6. 표시 또는 담기
-			if (result == 0) { // 글번호가 존재하지 않는다. -> 예외로 처리한다.
-				throw new Exception("예외 발생 : 글번호가 존재하지 않습니다. 글번호를 확인해 주세요.");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			// 특별한 예외는 그냥 전달한다.
-			if (e.getMessage().indexOf("예외 발생") >= 0)
-				throw e;
-			// 그외 처리 중 나타나는 오류에 대해서 사용자가 볼수 있는 예외로 만들어 전달한다.
-			else
-				throw new Exception("예외 발생 : 질문답변 순서번호 증가 DB 처리 중 예외가 발생했습니다.");
-		} finally {
-			// 7. 닫기
-			DB.close(con, pstmt);
-		}
-
-		// 결과 데이터를 리턴해 준다.
-		return result;
-	} // end of increase()
-
-	// 2-2. 글보기 처리
-	// BoardController - (Execute) - BoardListService - [BoardDAO.view()]
-	public BoardVO view(Long no) throws Exception {
-		// 결과를 저장할 수 있는 변수 선언.
-		BoardVO vo = null;
+		QnaVO vo = null;
 		try {
 			// 1. 드라이버 확인 - DB
 			// 2. 연결
@@ -157,17 +119,21 @@ public class QnaDAO extends DAO {
 			// 6. 표시 또는 담기
 			if (rs != null && rs.next()) {
 				// rs -> vo
-				vo = new BoardVO();
+				vo = new QnaVO();
 				vo.setNo(rs.getLong("no"));
 				vo.setTitle(rs.getString("title"));
 				vo.setContent(rs.getString("content"));
-				vo.setWriter(rs.getString("writer"));
+				vo.setId(rs.getString("id"));
+				vo.setName(rs.getString("name"));
 				vo.setWriteDate(rs.getString("writeDate"));
-				vo.setHit(rs.getLong("hit"));
+				vo.setRefNo(rs.getLong("refNo"));
+				vo.setOrdNo(rs.getLong("ordNo"));
+				vo.setLevNo(rs.getLong("levNo"));
+				
 			} // end of if
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new Exception("예외 발생 : 일반 게시판 글 보기 DB 처리중 오류 발생");
+			throw new Exception("예외 발생 : 질문답변 글 보기 DB 처리중 오류 발생");
 		} finally {
 			// 7. 닫기
 			DB.close(con, pstmt, rs);
@@ -189,7 +155,7 @@ public class QnaDAO extends DAO {
 			// 3. sql - 아래 LIST
 			// 4. 실행 객체 & 데이터 세팅
 			pstmt = con.prepareStatement(NO);
-			
+
 			// 5. 실행
 			rs = pstmt.executeQuery();
 			// 6. 표시 또는 담기
@@ -208,7 +174,44 @@ public class QnaDAO extends DAO {
 		return no;
 	} // end of getTotalRow()
 
-	// 3. 글등록 처리
+	// 3-2. 답변하기의 순서번호 1증가 처리 
+	// QnaController - (Execute) - QnaWriteService - [QnaDAO.increaseOrdNo()]
+	public int increaseOrdNo(QnaVO vo) throws Exception {
+		// 결과를 저장할 수 있는 변수 선언.
+		int result = 0;
+
+		try {
+			// 1. 드라이버 확인 - DB
+			// 2. 연결
+			con = DB.getConnection();
+			// 3. sql - 아래 LIST
+			// 4. 실행 객체 & 데이터 세팅
+			pstmt = con.prepareStatement(INCREASEORDNO);
+			pstmt.setLong(1, vo.getRefNo());
+			pstmt.setLong(2, vo.getOrdNo());
+			// 5. 실행 - update : executeUpdate() -> int 결과가 나옴.
+			result = pstmt.executeUpdate();
+			// 6. 표시 또는 담기
+			System.out.println("QnaDAO.increaseOredNo() - 순서번호 1증가 처리 완료");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			// 특별한 예외는 그냥 전달한다.
+			if (e.getMessage().indexOf("예외 발생") >= 0)
+				throw e;
+			// 그외 처리 중 나타나는 오류에 대해서 사용자가 볼수 있는 예외로 만들어 전달한다.
+			else
+				throw new Exception("예외 발생 : 질문답변 순서번호 증가 DB 처리 중 예외가 발생했습니다.");
+		} finally {
+			// 7. 닫기
+			DB.close(con, pstmt);
+		}
+
+		// 결과 데이터를 리턴해 준다.
+		return result;
+	} // end of increaseOrdNo()
+
+	// 3-3. 글등록 처리
 	// QnaController - (Execute) - QnaViewService - [QnaDAO.write()]
 	public int write(QnaVO vo) throws Exception {
 		// 결과를 저장할 수 있는 변수 선언.
@@ -221,11 +224,11 @@ public class QnaDAO extends DAO {
 			// 3. sql - 아래 LIST
 			// 4. 실행 객체 & 데이터 세팅
 			// (no, title, content, id, refNo, ordNo, levNo, parentNo)
-			if(vo.isQuestion())
+			if (vo.isQuestion())
 				pstmt = con.prepareStatement(QUESTION);
-			else 
+			else
 				// 답변인 경우에만 부모글이 존재
-				pstmt = con.prepareStatement(ANSWER);	
+				pstmt = con.prepareStatement(ANSWER);
 			pstmt.setLong(1, vo.getNo());
 			pstmt.setString(2, vo.getTitle());
 			pstmt.setString(3, vo.getContent());
@@ -234,14 +237,14 @@ public class QnaDAO extends DAO {
 			pstmt.setLong(6, vo.getOrdNo());
 			pstmt.setLong(7, vo.getLevNo());
 			// 답변인 경우에만 부모글이 존재
-			if(!vo.isQuestion())
+			if (!vo.isQuestion())
 				pstmt.setLong(8, vo.getParentNo());
-			
+
 			// 5. 실행 - update : executeUpdate() -> int 결과가 나옴.
 			result = pstmt.executeUpdate();
 			// 6. 표시 또는 담기
 			System.out.println();
-			System.out.println("*** "+ ((vo.isQuestion())? "질문" : "답변") +"등록이 완료 되었습니다.");
+			System.out.println("*** " + ((vo.isQuestion()) ? "질문" : "답변") + "등록이 완료 되었습니다.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			// 그외 처리 중 나타나는 오류에 대해서 사용자가 볼수 있는 예외로 만들어 전달한다.
@@ -394,12 +397,16 @@ public class QnaDAO extends DAO {
 
 	final String INCREASEORDNO = "update qna set ordNo = ordNo + 1 " + " where refNo = ? and ordNo >= ?";
 
-	final String VIEW = "select no, title, content, writer, " + " to_char(writeDate, 'yyyy-mm-dd') writeDate, hit "
-			+ " from board " + " where no = ?";
-	
+	// 질문답변 보기 + 수정 + 답변하기
+	final String VIEW = "select q.no, q.title, q.content, q.id, m.name, "
+			+ " to_char(q.writeDate, 'yyyy-mm-dd') writeDate, q.refNo,"
+			+ " q.ordNo, q.levNo "
+			+ " from qna q, member m "
+			+ " where (q.no = ?) and (q.id = m.id)";
+
 	final String ANSWER = "insert into qna " + " (no, title, content, id, refNo, ordNo, levNo, parentNo) "
 			+ " values(?, ?, ?, ?, ?, ?, ?, ?)";
-	
+
 	final String QUESTION = "insert into qna " + " (no, title, content, id, refNo, ordNo, levNo) "
 			+ " values(?, ?, ?, ?, ?, ?, ? )";
 

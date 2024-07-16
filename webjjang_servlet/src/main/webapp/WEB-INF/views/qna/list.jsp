@@ -18,7 +18,7 @@
 	선택의 상속 : a .data - a tag 안에 data class의 태그를 찾는다.
  */
 .dataRow:hover{
-	background: #ddd;
+	background: #f2f2f2;
 	cursor: pointer;
 }
  
@@ -27,12 +27,13 @@
 <script type="text/javascript">
 $(function(){
 	// 이벤트 처리
+	// 한줄 데이터 클릭하면 질문답변 보기로 이동 - 번호 필요 
 	$(".dataRow").click(function(){
 		// alert("click");
 		// 글번호 필요 - 수집
 		let no = $(this).find(".no").text();
 		console.log("no = " + no);
-		location="view.do?no=" + no + "&inc=1&${pageObject.pageQuery}";
+		location="view.do?no=" + no + "&${pageObject.pageQuery}";
 	});
 	
 	// perPageNum 처리
